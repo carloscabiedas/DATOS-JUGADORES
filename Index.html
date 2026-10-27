@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CD La Guardia | Club Deportivo</title>
+<style>
+:root{--azul:#12345a;--azul2:#1c5485;--dorado:#f4c044;--fondo:#f2f5f9;--blanco:#fff;--texto:#172538;--verde:#15803d}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--fondo);color:var(--texto)}
+header{background:linear-gradient(120deg,var(--azul),var(--azul2));color:white;padding:22px}
+.cabecera{max-width:1150px;margin:auto;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.escudo{width:85px;height:85px;border-radius:12px;background:white;color:var(--azul);display:grid;place-items:center;overflow:hidden;font-weight:bold;text-align:center}
+.escudo img{width:100%;height:100%;object-fit:contain}
+h1{margin:0;font-size:30px}
+.subtitulo{color:#dceaff;margin-top:8px}
+button{border:none;padding:11px 15px;border-radius:8px;cursor:pointer;font-weight:bold;background:var(--azul2);color:white}
+button:hover{opacity:.88}
+button:disabled{opacity:.45;cursor:not-allowed}
+.dorado{background:var(--dorado);color:#172538}
+.secundario{background:#e4ebf4;color:var(--azul)}
+.peligro{background:#b42318}
+.verde{background:#15803d}
+.gris{background:#64748b}
+.contenedor{max-width:1150px;margin:25px auto;padding:0 18px}
+.resumen{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:25px}
+.resumen div{background:white;padding:18px;border-radius:12px;border:1px solid #e0e6ee}
+.resumen strong{display:block;font-size:27px;color:var(--azul)}
+.resumen span{color:#64748b;font-size:13px}
+.barra{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:22px 0 15px}
+.barra h2{margin:0}
+input,select,textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:8px;font:inherit;background:white}
+.busqueda{display:flex;gap:10px;margin-bottom:18px}
+.busqueda input{flex:1}
+.plantilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:16px}
+.jugador{background:white;border-radius:13px;overflow:hidden;cursor:pointer;border:1px solid #dce4ed;transition:.2s}
+.jugador:hover{transform:translateY(-3px);box-shadow:0 8px 20px #12345a20}
+.foto{height:190px;position:relative;background:#e5ebf3;display:grid;place-items:center;color:#718096;font-size:48px;overflow:hidden}
+.foto img{width:100%;height:100%;object-fit:cover}
+.dorsal{position:absolute;top:10px;left:10px;padding:7px 10px;border-radius:7px;background:var(--dorado);color:#172538;font-weight:bold;font-size:15px}
+.info{padding:14px}
+.info h3{margin:0 0 7px;display:flex;align-items:center;gap:7px}
+.punto-estado{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--verde);flex:0 0 10px}
+.punto-baja{background:#9ca3af}
+.estado-texto{font-size:12px;color:#64748b;font-weight:normal}
+.mini-stats{display:flex;justify-content:space-between;border-top:1px solid #e5eaf0;padding-top:12px;margin-top:12px;font-size:13px}
+.mini-stats b{color:var(--azul)}
+.vacio{grid-column:1/-1;background:white;text-align:center;padding:35px 15px;border-radius:12px;color:#64748b}
+.seccion-historicos{margin-top:36px;padding-top:8px;border-top:2px solid #dce4ed}
+.seccion-historicos h2{margin-bottom:8px}
+.texto-ayuda{color:#64748b;font-size:14px}
+.modal{display:none;position:fixed;inset:0;z-index:10;background:#07172bd9;padding:15px;overflow-y:auto;align-items:flex-start;justify-content:center}
+.modal.abierto{display:flex}
+.panel{width:100%;max-width:750px;background:white;border-radius:14px;margin:auto;overflow:hidden}
+.panel-cabecera{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:17px 20px;border-bottom:1px solid #e1e7ef}
+.panel-cabecera h2{margin:0;font-size:21px}
+.cerrar{background:#e5ebf3;color:#172538;font-size:19px}
+.panel-contenido{padding:20px}
+.formulario{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.campo label{display:block;font-weight:bold;font-size:13px;margin-bottom:7px}
+.completo{grid-column:1/-1}
+.acciones{padding:15px 20px;border-top:1px solid #e1e7ef;display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap}
+.perfil{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.perfil-foto{width:125px;height:140px;background:#e5ebf3;border-radius:10px;overflow:hidden;display:grid;place-items:center;font-size:45px}
+.perfil-foto img{width:100%;height:100%;object-fit:cover}
+.perfil h2{margin:0 0 8px}
+.perfil p{color:#64748b;margin:5px 0}
+.estado-perfil{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;background:#e8f7ed;color:#166534;font-size:13px;font-weight:bold;margin-top:5px}
+.estado-perfil.baja{background:#eef0f3;color:#475569}
+.metricas{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:20px 0}
+.metrica{background:#edf3f9;border-radius:10px;padding:13px}
+.metrica span{display:block;color:#64748b;font-size:12px}
+.metrica strong{font-size:24px;color:var(--azul)}
+.temporada{border:1px solid #dce4ed;padding:14px;border-radius:10px;margin:12px 0}
+.temporada h3{margin:0}
+.temporada-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.estadisticas{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
+.estadisticas div{background:#f4f6f9;padding:10px;border-radius:8px}
+.estadisticas span{display:block;font-size:12px;color:#64748b}
+.estadisticas b{font-size:19px}
+.nota{margin-top:22px;padding:13px;background:#fff4d6;border-radius:9px;font-size:13px;line-height:1.5}
+#aviso{display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#12345a;color:white;padding:13px 18px;border-radius:9px;z-index:30;max-width:90%;text-align:center}
+@media(max-width:600px){
+  h1{font-size:24px}
+  .resumen{gap:7px}
+  .resumen div{padding:12px}
+  .resumen strong{font-size:21px}
+  .formulario{grid-template-columns:1fr}
+  .completo{grid-column:auto}
+  .busqueda{flex-direction:column}
+  .estadisticas,.metricas{gap:6px}
+  .estadisticas div{padding:7px}
+  .panel-contenido{padding:15px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="cabecera">
+    <div class="escudo" id="escudo"><span>CD<br>LA GUARDIA</span></div>
+    <div style="flex:1">
+      <h1>CD La Guardia</h1>
+      <div class="subtitulo">Club deportivo · Plantilla e historial</div>
+    </div>
+    <button class="dorado" onclick="document.getElementById('archivoEscudo').click()">Cambiar escudo</button>
+    <input id="archivoEscudo" type="file" accept="image/*" hidden>
+  </div>
+</header>
+
+<main class="contenedor">
+  <div class="resumen">
+    <div><strong id="totalJugadores">0</strong><span>Jugadores en plantilla</span></div>
+    <div><strong id="totalPartidos">0</strong><span>Partidos históricos</span></div>
+    <div><strong id="totalGoles">0</strong><span>Goles históricos</span></div>
+  </div>
+
+  <div class="barra">
+    <h2>Plantilla del club</h2>
+    <button onclick="nuevoJugador()">＋ Añadir jugador</button>
+  </div>
+
+  <div class="busqueda">
+    <input id="buscar" placeholder="Buscar jugador por nombre o dorsal...">
+  </div>
+
+  <div class="plantilla" id="plantilla"></div>
+
+  <section class="seccion-historicos">
+    <div class="barra">
+      <div>
+        <h2>Jugadores históricos</h2>
+        <div class="texto-ayuda">Jugadores dados de baja que ya no forman parte de la plantilla activa.</div>
+      </div>
+      <strong id="totalHistoricos">0</strong>
+    </div>
+    <div class="plantilla" id="historicos"></div>
+  </section>
+
+  <div class="nota">
+    Los datos se guardan en este navegador. Exporta copias de seguridad periódicamente. Esta versión no sincroniza automáticamente los datos entre dispositivos.
+    <div style="margin-top:12px">
+      <button class="secundario" onclick="abrirTemporadas()">Temporadas y copias de seguridad</button>
+    </div>
+  </div>
+</main>
+
+<div class="modal" id="modalJugador">
+  <div class="panel">
+    <div class="panel-cabecera">
+      <h2 id="tituloJugador">Añadir jugador</h2>
+      <button type="button" class="cerrar" onclick="cerrarModal('modalJugador')">×</button>
+    </div>
+    <form id="formJugador">
+      <div class="panel-contenido">
+        <div class="formulario">
+          <div class="campo completo">
+            <label>Nombre y apellidos *</label>
+            <input id="nombre" required maxlength="100">
+          </div>
+          <div class="campo">
+            <label>Dorsal</label>
+            <input id="dorsal" type="number" min="0" max="999">
+          </div>
+          <div class="campo">
+            <label>Foto del jugador</label>
+            <input id="fotoJugador" type="file" accept="image/*">
+          </div>
+        </div>
+      </div>
+      <div class="acciones">
+        <button type="button" class="secundario" onclick="cerrarModal('modalJugador')">Cancelar</button>
+        <button type="submit">Guardar jugador</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal" id="modalFicha">
+  <div class="panel">
+    <div class="panel-cabecera">
+      <h2>Ficha del jugador</h2>
+      <button class="cerrar" onclick="cerrarModal('modalFicha')">×</button>
+    </div>
+    <div class="panel-contenido" id="contenidoFicha"></div>
+    <div class="acciones" id="accionesFicha"></div>
+  </div>
+</div>
+
+<div class="modal" id="modalEstadisticas">
+  <div class="panel">
+    <div class="panel-cabecera">
+      <h2 id="tituloEstadisticas">Estadísticas</h2>
+      <button class="cerrar" onclick="cerrarModal('modalEstadisticas')">×</button>
+    </div>
+    <form id="formEstadisticas">
+      <div class="panel-contenido">
+        <div class="formulario">
+          <div class="campo completo">
+            <label>Temporada *</label>
+            <select id="temporadaEstadisticas" required></select>
+          </div>
+          <div class="campo">
+            <label>Partidos jugados</label>
+            <input id="partidos" type="number" min="0" step="1" value="0" required>
+          </div>
+          <div class="campo">
+            <label>Goles</label>
+            <input id="goles" type="number" min="0" step="1" value="0" required>
+          </div>
+          <div class="campo">
+            <label>Tarjetas amarillas</label>
+            <input id="amarillas" type="number" min="0" step="1" value="0" required>
+          </div>
+          <div class="campo">
+            <label>Tarjetas rojas</label>
+            <input id="rojas" type="number" min="0" step="1" value="0" required>
+          </div>
+        </div>
+      </div>
+      <div class="acciones" style="justify-content:space-between">
+        <button type="button" class="peligro" id="btnEliminarTemporada" onclick="eliminarTemporadaJugadorDesdeEstadisticas()">Eliminar temporada</button>
+        <div style="display:flex;gap:9px;flex-wrap:wrap">
+          <button type="button" class="secundario" onclick="cerrarModal('modalEstadisticas')">Cancelar</button>
+          <button type="submit">Guardar estadísticas</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal" id="modalTemporadas">
+  <div class="panel">
+    <div class="panel-cabecera">
+      <h2>Temporadas y copias de seguridad</h2>
+      <button class="cerrar" onclick="cerrarModal('modalTemporadas')">×</button>
+    </div>
+    <div class="panel-contenido">
+      <p>Temporadas disponibles desde 2023/24 hasta 2026/27. Puedes añadir más si lo necesitas.</p>
+      <form id="formTemporada" style="display:flex;gap:8px;margin-bottom:18px">
+        <input id="nuevaTemporada" placeholder="Ej. 2027/28" required>
+        <button type="submit">Añadir</button>
+      </form>
+      <div id="listaTemporadas"></div>
+      <hr style="border:0;border-top:1px solid #ddd;margin:22px 0">
+      <p>Guarda todos los datos en un archivo de copia de seguridad.</p>
+      <button onclick="exportarDatos()">Exportar copia</button>
+      <button class="secundario" onclick="document.getElementById('archivoImportar').click()">Importar copia</button>
+      <input type="file" id="archivoImportar" accept=".json,application/json" hidden>
+    </div>
+    <div class="acciones">
+      <button class="secundario" onclick="cerrarModal('modalTemporadas')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<div id="aviso" role="status" aria-live="polite"></div>
+
+<script>
+const CLAVE="cdLaGuardiaDatos_v1";
+const TEMPORADA_INICIAL="2026/27";
+const TEMPORADAS_INICIALES=["2023/24","2024/25","2025/26","2026/27"];
+
+const SUPABASE_URL="https://jkoetqcdvqdepxtqngui.supabase.com";
+const SUPABASE_KEY="sb_publishable_1fdvB5NM4DB2L3iY_lHJ2Q_6lhLEzUz";
+const SUPABASE_TABLA="club_datos";
+const SUPABASE_ID="cd-la-guardia";
+
+let supabaseListo=false;
+let temporizadorSupabase=null;
+let datos={
+  escudo:"",
+  temporadas:[...TEMPORADAS_INICIALES],
+  temporadaActual:TEMPORADA_INICIAL,
+  jugadores:[],
+  versionTemporadasManuales:true
+};
+
+let jugadorEditando=null;
+let jugadorAbierto=null;
+let jugadorEstadisticas=null;
+
+function idNuevo(){
+  return Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+}
+
+function escapar(valor){
+  return String(valor??"").replace(/[&<>"']/g,c=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[c]));
+}
+
+function guardar(){
+  try{
+    localStorage.setItem(CLAVE,JSON.stringify(datos));
+  }catch(e){
+    alert("No se pudieron guardar los datos. Prueba con fotos más pequeñas.");
+    return;
+  }
+
+  if(supabaseListo){
+    clearTimeout(temporizadorSupabase);
+    temporizadorSupabase=setTimeout(guardarEnSupabase,800);
+  }
+}
+
+async function guardarEnSupabase(){
+  try{
+    const respuesta=await fetch(
+      `${SUPABASE_URL}/rest/v1/${SUPABASE_TABLA}?on_conflict=id`,
+      {
+        method:"POST",
+        headers:{
+          "apikey":SUPABASE_KEY,
+          "Authorization":`Bearer ${SUPABASE_KEY}`,
+          "Content-Type":"application/json",
+          "Prefer":"resolution=merge-duplicates,return=minimal"
+        },
+        body:JSON.stringify({
+          id:SUPABASE_ID,
+          datos:datos,
+          actualizado_en:new Date().toISOString()
+        })
+      }
+    );
+
+    if(!respuesta.ok){
+      throw new Error(await respuesta.text());
+    }
+
+    console.log("Datos sincronizados con Supabase.");
+  }catch(error){
+    console.error("Error al sincronizar:",error);
+    aviso("No se pudieron sincronizar los datos con la nube.");
+  }
+}
+
+async function iniciarSincronizacion(){
+  try{
+    const respuesta=await fetch(
+      `${SUPABASE_URL}/rest/v1/${SUPABASE_TABLA}?id=eq.${SUPABASE_ID}&select=datos`,
+      {
+        headers:{
+          "apikey":SUPABASE_KEY,
+          "Authorization":`Bearer ${SUPABASE_KEY}`
+        }
+      }
+    );
+
+    if(!respuesta.ok){
+      throw new Error(await respuesta.text());
+    }
+
+    const filas=await respuesta.json();
+
+    if(filas.length>0){
+      if(!filas[0].datos ||
+         !Array.isArray(filas[0].datos.jugadores) ||
+         !Array.isArray(filas[0].datos.temporadas)){
+        throw new Error("Los datos de Supabase no tienen el formato esperado.");
+      }
+
+      datos=filas[0].datos;
+      cargarDatosImportados();
+      localStorage.setItem(CLAVE,JSON.stringify(datos));
+      dibujar();
+    }else{
+      // Si la tabla está vacía, conserva y sube los datos locales.
+      const respuestaInicial=await fetch(
+        `${SUPABASE_URL}/rest/v1/${SUPABASE_TABLA}`,
+        {
+          method:"POST",
+          headers:{
+            "apikey":SUPABASE_KEY,
+            "Authorization":`Bearer ${SUPABASE_KEY}`,
+            "Content-Type":"application/json",
+            "Prefer":"return=minimal"
+          },
+          body:JSON.stringify({
+            id:SUPABASE_ID,
+            datos:datos,
+            actualizado_en:new Date().toISOString()
+          })
+        }
+      );
+
+      if(!respuestaInicial.ok){
+        throw new Error(await respuestaInicial.text());
+      }
+    }
+
+    supabaseListo=true;
+    aviso("Conectado: datos sincronizados con la nube.");
+  }catch(error){
+    console.error("Error de conexión con Supabase:",error);
+    aviso("No se pudo conectar con Supabase. Tus datos locales se conservan.");
+  }
+}
+
+
+function migrarTemporadasAntiguas(){
+  if(datos.versionTemporadasManuales)return;
+
+  datos.jugadores.forEach(j=>{
+    if(!Array.isArray(j.temporadas))j.temporadas=[];
+    if(!Array.isArray(j.estadisticas))j.estadisticas=[];
+
+    const teniaTodas=TEMPORADAS_INICIALES.every(t=>j.temporadas.includes(t));
+
+    if(teniaTodas){
+      j.temporadas=[
+        ...new Set(
+          j.estadisticas
+            .map(s=>s.temporada)
+            .filter(t=>datos.temporadas.includes(t))
+        )
+      ];
+    }
+
+    j.estadisticas.forEach(s=>{
+      if(s.temporada&&datos.temporadas.includes(s.temporada)&&!j.temporadas.includes(s.temporada)){
+        j.temporadas.push(s.temporada);
+      }
+    });
+  });
+
+  datos.versionTemporadasManuales=true;
+}
+
+function cargar(){
+  try{
+    const guardado=localStorage.getItem(CLAVE);
+
+    if(guardado){
+      const d=JSON.parse(guardado);
+      if(Array.isArray(d.jugadores)&&Array.isArray(d.temporadas))datos=d;
+    }
+  }catch(e){
+    console.error(e);
+  }
+
+  if(!Array.isArray(datos.temporadas))datos.temporadas=[];
+  if(!Array.isArray(datos.jugadores))datos.jugadores=[];
+
+  TEMPORADAS_INICIALES.forEach(t=>{
+    if(!datos.temporadas.includes(t))datos.temporadas.push(t);
+  });
+
+  datos.temporadas.sort();
+
+  if(!datos.temporadaActual||!datos.temporadas.includes(datos.temporadaActual)){
+    datos.temporadaActual=TEMPORADA_INICIAL;
+  }
+
+  datos.jugadores.forEach(j=>{
+    if(!Array.isArray(j.temporadas))j.temporadas=[];
+    if(!Array.isArray(j.estadisticas))j.estadisticas=[];
+    if(typeof j.activo!=="boolean")j.activo=true;
+
+    j.estadisticas=j.estadisticas.map(s=>({
+      temporada:s.temporada,
+      partidos:Number(s.partidos)||0,
+      goles:Number(s.goles)||0,
+      amarillas:Number(s.amarillas)||0,
+      rojas:Number(s.rojas)||0
+    }));
+  });
+
+  migrarTemporadasAntiguas();
+  guardar();
+}
+
+function aviso(texto){
+  const el=document.getElementById("aviso");
+  el.textContent=texto;
+  el.style.display="block";
+  clearTimeout(aviso.temporizador);
+  aviso.temporizador=setTimeout(()=>el.style.display="none",2600);
+}
+
+function abrirModal(id){
+  document.getElementById(id).classList.add("abierto");
+}
+
+function cerrarModal(id){
+  document.getElementById(id).classList.remove("abierto");
+}
+
+function leerImagen(archivo){
+  return new Promise((resolve,reject)=>{
+    if(!archivo)return resolve("");
+
+    if(!archivo.type.startsWith("image/")){
+      return reject(new Error("Selecciona un archivo de imagen."));
+    }
+
+    if(archivo.size>4*1024*1024){
+      return reject(new Error("La imagen debe ocupar menos de 4 MB."));
+    }
+
+    const lector=new FileReader();
+    lector.onload=()=>resolve(lector.result);
+    lector.onerror=()=>reject(new Error("No se pudo leer la imagen."));
+    lector.readAsDataURL(archivo);
+  });
+}
+
+function totales(j){
+  return (j.estadisticas||[]).reduce((t,e)=>{
+    t.partidos+=Number(e.partidos)||0;
+    t.goles+=Number(e.goles)||0;
+    return t;
+  },{partidos:0,goles:0});
+}
+
+function estadisticaDe(j,temporada){
+  return (j.estadisticas||[]).find(e=>e.temporada===temporada)||
+    {temporada,partidos:0,goles:0,amarillas:0,rojas:0};
+}
+
+function temporadasDe(j){
+  return [
+    ...new Set([
+      ...(j.temporadas||[]),
+      ...(j.estadisticas||[]).map(e=>e.temporada)
+    ])
+  ]
+  .filter(t=>datos.temporadas.includes(t))
+  .sort((a,b)=>datos.temporadas.indexOf(b)-datos.temporadas.indexOf(a));
+}
+
+function actualizarSelectores(){
+  document.getElementById("temporadaEstadisticas").innerHTML=
+    datos.temporadas.map(t=>`<option value="${escapar(t)}">${escapar(t)}</option>`).join("");
+}
+
+function tarjetaJugador(j){
+  const t=totales(j);
+  const iniciales=escapar(
+    j.nombre.split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase()
+  );
+
+  return `
+    <article class="jugador" data-id="${escapar(j.id)}">
+      <div class="foto">
+        ${j.foto?`<img src="${j.foto}" alt="Foto de ${escapar(j.nombre)}">`:iniciales}
+        <span class="dorsal">#${j.dorsal===""?"—":escapar(j.dorsal)}</span>
+      </div>
+      <div class="info">
+        <h3>
+          <span class="punto-estado ${j.activo?"":"punto-baja"}"></span>
+          ${escapar(j.nombre)}
+        </h3>
+        <div class="estado-texto">${j.activo?"En plantilla":"Jugador histórico"}</div>
+        <div class="mini-stats">
+          <span><b>${t.partidos}</b> partidos</span>
+          <span><b>${t.goles}</b> goles</span>
+        </div>
+      </div>
+    </article>`;
+}
+
+function dibujar(){
+  actualizarSelectores();
+
+  document.getElementById("escudo").innerHTML=datos.escudo
+    ?`<img src="${datos.escudo}" alt="Escudo del club">`
+    :"<span>CD<br>LA GUARDIA</span>";
+
+  const activos=datos.jugadores.filter(j=>j.activo!==false);
+  const inactivos=datos.jugadores.filter(j=>j.activo===false);
+
+  document.getElementById("totalJugadores").textContent=activos.length;
+
+  const total=datos.jugadores.reduce((a,j)=>{
+    const t=totales(j);
+    a.partidos+=t.partidos;
+    a.goles+=t.goles;
+    return a;
+  },{partidos:0,goles:0});
+
+  document.getElementById("totalPartidos").textContent=total.partidos;
+  document.getElementById("totalGoles").textContent=total.goles;
+
+  const busqueda=document.getElementById("buscar").value.toLowerCase().trim();
+
+  const filtrar=lista=>lista
+    .filter(j=>`${j.nombre} ${j.dorsal}`.toLowerCase().includes(busqueda))
+    .sort((a,b)=>(Number(a.dorsal)||999)-(Number(b.dorsal)||999));
+
+  const plantilla=filtrar(activos);
+  const historicos=filtrar(inactivos);
+
+  document.getElementById("plantilla").innerHTML=plantilla.length
+    ?plantilla.map(tarjetaJugador).join("")
+    :`<div class="vacio"><h3>No hay jugadores en plantilla</h3>Añade un jugador o da de alta a uno desde históricos.</div>`;
+
+  document.getElementById("historicos").innerHTML=historicos.length
+    ?historicos.map(tarjetaJugador).join("")
+    :`<div class="vacio">Todavía no hay jugadores históricos.</div>`;
+
+  document.getElementById("totalHistoricos").textContent=historicos.length;
+}
+
+function nuevoJugador(id=null){
+  jugadorEditando=id;
+
+  const j=id?datos.jugadores.find(x=>x.id===id):null;
+
+  document.getElementById("formJugador").reset();
+  document.getElementById("tituloJugador").textContent=j?"Editar jugador":"Añadir jugador";
+  document.getElementById("nombre").value=j?.nombre||"";
+  document.getElementById("dorsal").value=j?.dorsal??"";
+  document.getElementById("fotoJugador").value="";
+  document.getElementById("fotoJugador").dataset.fotoActual=j?.foto||"";
+
+  abrirModal("modalJugador");
+}
+
+document.getElementById("formJugador").addEventListener("submit",async e=>{
+  e.preventDefault();
+
+  try{
+    const archivo=document.getElementById("fotoJugador").files[0];
+
+    const foto=archivo
+      ?await leerImagen(archivo)
+      :document.getElementById("fotoJugador").dataset.fotoActual||"";
+
+    let j=jugadorEditando
+      ?datos.jugadores.find(x=>x.id===jugadorEditando)
+      :null;
+
+    if(j){
+      j.nombre=document.getElementById("nombre").value.trim();
+      j.dorsal=document.getElementById("dorsal").value;
+      j.foto=foto;
+    }else{
+      j={
+        id:idNuevo(),
+        nombre:document.getElementById("nombre").value.trim(),
+        dorsal:document.getElementById("dorsal").value,
+        foto,
+        temporadas:[],
+        estadisticas:[],
+        activo:true
+      };
+      datos.jugadores.push(j);
+    }
+
+    guardar();
+    cerrarModal("modalJugador");
+    dibujar();
+    aviso("Jugador guardado correctamente.");
+
+    if(jugadorAbierto===j.id)mostrarFicha(j.id);
+  }catch(err){
+    alert(err.message);
+  }
+});
+
+function anadirTemporadaJugador(id){
+  const j=datos.jugadores.find(x=>x.id===id);
+  if(!j)return;
+
+  j.temporadas=Array.isArray(j.temporadas)?j.temporadas:[];
+
+  const registradas=temporadasDe(j);
+  const disponibles=datos.temporadas.filter(t=>!registradas.includes(t));
+
+  if(!disponibles.length){
+    aviso("Este jugador ya tiene todas las temporadas disponibles.");
+    return;
+  }
+
+  const respuesta=prompt(
+    "¿Qué temporada quieres añadir a este jugador?\n\n"+
+    disponibles.map((t,i)=>`${i+1}. ${t}`).join("\n")+
+    "\n\nEscribe el número de la temporada:"
+  );
+
+  if(respuesta===null)return;
+
+  const indice=Number(respuesta)-1;
+
+  if(
+    respuesta.trim()===""||
+    !Number.isInteger(indice)||
+    indice<0||
+    indice>=disponibles.length
+  ){
+    alert("Selecciona un número válido.");
+    return;
+  }
+
+  j.temporadas.push(disponibles[indice]);
+
+  guardar();
+  dibujar();
+  mostrarFicha(id);
+  aviso("Temporada añadida al jugador.");
+}
+
+function eliminarTemporadaDeJugador(id,temporada){
+  const j=datos.jugadores.find(x=>x.id===id);
+  if(!j)return;
+
+  if(!confirm(
+    `¿Eliminar la temporada ${temporada} de ${j.nombre}?\n\n`+
+    "También se borrarán las estadísticas de esa temporada para este jugador. "+
+    "Esta acción no afecta a otros jugadores."
+  ))return;
+
+  j.temporadas=(j.temporadas||[]).filter(t=>t!==temporada);
+  j.estadisticas=(j.estadisticas||[]).filter(s=>s.temporada!==temporada);
+
+  guardar();
+  dibujar();
+  mostrarFicha(id);
+  aviso("Temporada eliminada de la ficha del jugador.");
+}
+
+function mostrarFicha(id){
+  const j=datos.jugadores.find(x=>x.id===id);
+  if(!j)return;
+
+  jugadorAbierto=id;
+
+  const t=totales(j);
+  const temporadas=temporadasDe(j);
+
+  const iniciales=escapar(
+    j.nombre.split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase()
+  );
+
+  document.getElementById("contenidoFicha").innerHTML=`
+    <div class="perfil">
+      <div class="perfil-foto">
+        ${j.foto?`<img src="${j.foto}" alt="Foto del jugador">`:iniciales}
+      </div>
+      <div>
+        <h2>${escapar(j.nombre)}</h2>
+        <p>Dorsal: ${j.dorsal===""?"—":escapar(j.dorsal)}</p>
+        <div class="estado-perfil ${j.activo?"":"baja"}">
+          <span class="punto-estado ${j.activo?"":"punto-baja"}"></span>
+          ${j.activo?"Dado de alta · En plantilla":"Dado de baja · Jugador histórico"}
+        </div>
+      </div>
+    </div>
+
+    <div class="metricas">
+      <div class="metrica">
+        <span>Partidos totales</span>
+        <strong>${t.partidos}</strong>
+      </div>
+      <div class="metrica">
+        <span>Goles totales</span>
+        <strong>${t.goles}</strong>
+      </div>
+    </div>
+
+    <div class="barra">
+      <h2>Historial por temporadas</h2>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="secundario" onclick="anadirTemporadaJugador('${escapar(j.id)}')">＋ Añadir temporada</button>
+        <button onclick="abrirEstadisticas('${escapar(j.id)}')" ${temporadas.length?"":"disabled"}>＋ Añadir estadísticas</button>
+      </div>
+    </div>
+
+    ${
+      temporadas.length
+      ?temporadas.map(temp=>{
+        const s=estadisticaDe(j,temp);
+
+        return `
+          <div class="temporada">
+            <div class="temporada-top">
+              <h3>${escapar(temp)}</h3>
+              <div style="display:flex;gap:7px;flex-wrap:wrap">
+                <button class="secundario" onclick="abrirEstadisticas('${escapar(j.id)}','${escapar(temp)}')">Editar estadísticas</button>
+                <button class="peligro" onclick="eliminarTemporadaDeJugador('${escapar(j.id)}','${escapar(temp)}')">Eliminar temporada</button>
+              </div>
+            </div>
+
+            <div class="estadisticas">
+              <div><span>Partidos</span><b>${Number(s.partidos)||0}</b></div>
+              <div><span>Goles</span><b>${Number(s.goles)||0}</b></div>
+              <div><span>Amarillas</span><b>${Number(s.amarillas)||0}</b></div>
+              <div><span>Rojas</span><b>${Number(s.rojas)||0}</b></div>
+            </div>
+          </div>`;
+      }).join("")
+      :`<p>Este jugador todavía no tiene temporadas asignadas. Pulsa «Añadir temporada» para elegir una.</p>`
+    }
+  `;
+
+  document.getElementById("accionesFicha").innerHTML=`
+    <button class="${j.activo?"gris":"verde"}" onclick="cambiarEstadoJugador('${escapar(j.id)}')">${j.activo?"Dar de baja":"Dar de alta"}</button>
+    <button class="peligro" onclick="eliminarJugador('${escapar(j.id)}')">Eliminar jugador</button>
+    <button class="secundario" onclick="nuevoJugador('${escapar(j.id)}')">Editar ficha</button>
+    <button onclick="cerrarModal('modalFicha')">Cerrar</button>
+  `;
+
+  abrirModal("modalFicha");
+}
+
+function cambiarEstadoJugador(id){
+  const j=datos.jugadores.find(x=>x.id===id);
+  if(!j)return;
+
+  if(j.activo){
+    if(!confirm(
+      `¿Dar de baja a ${j.nombre}?\n\n`+
+      "Pasará a «Jugadores históricos» y se conservarán sus temporadas y estadísticas."
+    ))return;
+
+    j.activo=false;
+  }else{
+    if(!confirm(`¿Dar de alta a ${j.nombre} y devolverlo a la plantilla del club?`))return;
+    j.activo=true;
+  }
+
+  guardar();
+  dibujar();
+  mostrarFicha(id);
+  aviso(j.activo?"Jugador dado de alta.":"Jugador trasladado a históricos.");
+}
+
+document.getElementById("plantilla").addEventListener("click",e=>{
+  const tarjeta=e.target.closest("[data-id]");
+  if(tarjeta)mostrarFicha(tarjeta.dataset.id);
+});
+
+document.getElementById("historicos").addEventListener("click",e=>{
+  const tarjeta=e.target.closest("[data-id]");
+  if(tarjeta)mostrarFicha(tarjeta.dataset.id);
+});
+
+function eliminarJugador(id){
+  const j=datos.jugadores.find(x=>x.id===id);
+
+  if(!j||!confirm(
+    `¿Eliminar definitivamente a ${j.nombre}? Se borrarán sus temporadas y estadísticas.`
+  ))return;
+
+  datos.jugadores=datos.jugadores.filter(x=>x.id!==id);
+
+  guardar();
+  cerrarModal("modalFicha");
+  dibujar();
+  aviso("Jugador eliminado.");
+}
+
+function abrirEstadisticas(id,temporada=null){
+  const j=datos.jugadores.find(x=>x.id===id);
+  if(!j)return;
+
+  const asignadas=temporadasDe(j);
+
+  if(!asignadas.length){
+    aviso("Primero añade una temporada a este jugador.");
+    return;
+  }
+
+  jugadorEstadisticas=id;
+
+  document.getElementById("formEstadisticas").reset();
+  document.getElementById("tituloEstadisticas").textContent="Estadísticas: "+j.nombre;
+
+  const selector=document.getElementById("temporadaEstadisticas");
+
+  selector.innerHTML=asignadas
+    .map(t=>`<option value="${escapar(t)}">${escapar(t)}</option>`)
+    .join("");
+
+  selector.value=temporada&&asignadas.includes(temporada)?temporada:asignadas[0];
+
+  document.getElementById("btnEliminarTemporada").disabled=false;
+
+  cargarCamposEstadisticas();
+  selector.onchange=cargarCamposEstadisticas;
+
+  abrirModal("modalEstadisticas");
+}
+
+function cargarCamposEstadisticas(){
+  const j=datos.jugadores.find(x=>x.id===jugadorEstadisticas);
+  if(!j)return;
+
+  const s=estadisticaDe(j,document.getElementById("temporadaEstadisticas").value);
+
+  document.getElementById("partidos").value=s.partidos||0;
+  document.getElementById("goles").value=s.goles||0;
+  document.getElementById("amarillas").value=s.amarillas||0;
+  document.getElementById("rojas").value=s.rojas||0;
+}
+
+function eliminarTemporadaJugadorDesdeEstadisticas(){
+  const j=datos.jugadores.find(x=>x.id===jugadorEstadisticas);
+  if(!j)return;
+
+  const temporada=document.getElementById("temporadaEstadisticas").value;
+
+  if(!temporada){
+    aviso("No hay ninguna temporada seleccionada.");
+    return;
+  }
+
+  if(!confirm(
+    `¿Eliminar la temporada ${temporada} de ${j.nombre}?\n\n`+
+    "Se borrarán también las estadísticas guardadas de esa temporada para este jugador."
+  ))return;
+
+  j.temporadas=(j.temporadas||[]).filter(t=>t!==temporada);
+  j.estadisticas=(j.estadisticas||[]).filter(s=>s.temporada!==temporada);
+
+  guardar();
+  cerrarModal("modalEstadisticas");
+  dibujar();
+  mostrarFicha(j.id);
+  aviso("Temporada eliminada del jugador.");
+}
+
+document.getElementById("formEstadisticas").addEventListener("submit",e=>{
+  e.preventDefault();
+
+  const j=datos.jugadores.find(x=>x.id===jugadorEstadisticas);
+  if(!j)return;
+
+  const temporada=document.getElementById("temporadaEstadisticas").value;
+
+  if(!temporadasDe(j).includes(temporada)){
+    alert("Esta temporada no está asignada al jugador.");
+    return;
+  }
+
+  for(const campo of ["partidos","goles","amarillas","rojas"]){
+    const input=document.getElementById(campo);
+    const valor=Number(input.value);
+
+    if(!Number.isInteger(valor)||valor<0){
+      alert("Introduce números enteros iguales o superiores a cero.");
+      input.focus();
+      return;
+    }
+  }
+
+  const s={
+    temporada,
+    partidos:Number(document.getElementById("partidos").value)||0,
+    goles:Number(document.getElementById("goles").value)||0,
+    amarillas:Number(document.getElementById("amarillas").value)||0,
+    rojas:Number(document.getElementById("rojas").value)||0
+  };
+
+  j.estadisticas=j.estadisticas||[];
+
+  const i=j.estadisticas.findIndex(x=>x.temporada===temporada);
+
+  if(i>=0)j.estadisticas[i]=s;
+  else j.estadisticas.push(s);
+
+  guardar();
+  cerrarModal("modalEstadisticas");
+  dibujar();
+  mostrarFicha(j.id);
+  aviso("Estadísticas guardadas.");
+});
+
+function abrirTemporadas(){
+  dibujarTemporadas();
+  abrirModal("modalTemporadas");
+}
+
+function dibujarTemporadas(){
+  document.getElementById("listaTemporadas").innerHTML=datos.temporadas.map(t=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px;border:1px solid #ddd;border-radius:8px;margin:8px 0;flex-wrap:wrap">
+      <span><b>${escapar(t)}</b>${t===datos.temporadaActual?" · Actual":""}</span>
+      <div>
+        <button class="secundario" data-usar="${escapar(t)}">Seleccionar</button>
+        ${datos.temporadas.length>1?` <button class="peligro" data-borrar="${escapar(t)}">Eliminar</button>`:""}
+      </div>
+    </div>
+  `).join("");
+
+  document.querySelectorAll("[data-usar]").forEach(b=>{
+    b.onclick=()=>{
+      datos.temporadaActual=b.dataset.usar;
+      guardar();
+      dibujarTemporadas();
+      aviso("Temporada seleccionada.");
+    };
+  });
+
+  document.querySelectorAll("[data-borrar]").forEach(b=>{
+    b.onclick=()=>{
+      const t=b.dataset.borrar;
+
+      if(!confirm(`¿Eliminar la temporada ${t} y sus estadísticas de todos los jugadores?`))return;
+
+      datos.temporadas=datos.temporadas.filter(x=>x!==t);
+
+      datos.jugadores.forEach(j=>{
+        j.temporadas=(j.temporadas||[]).filter(x=>x!==t);
+        j.estadisticas=(j.estadisticas||[]).filter(x=>x.temporada!==t);
+      });
+
+      if(datos.temporadaActual===t)datos.temporadaActual=datos.temporadas[0];
+
+      guardar();
+      dibujar();
+      dibujarTemporadas();
+      aviso("Temporada eliminada.");
+    };
+  });
+}
+
+document.getElementById("formTemporada").addEventListener("submit",e=>{
+  e.preventDefault();
+
+  const t=document.getElementById("nuevaTemporada").value.trim();
+  if(!t)return;
+
+  if(datos.temporadas.includes(t)){
+    alert("Esta temporada ya existe.");
+    return;
+  }
+
+  datos.temporadas.push(t);
+  datos.temporadas.sort();
+  datos.temporadaActual=t;
+
+  document.getElementById("nuevaTemporada").value="";
+
+  guardar();
+  dibujar();
+  dibujarTemporadas();
+
+  aviso("Temporada añadida. Asígnala manualmente a cada jugador.");
+});
+
+document.getElementById("archivoEscudo").addEventListener("change",async e=>{
+  try{
+    const archivo=e.target.files[0];
+    if(!archivo)return;
+
+    datos.escudo=await leerImagen(archivo);
+
+    guardar();
+    dibujar();
+    aviso("Escudo actualizado.");
+  }catch(err){
+    alert(err.message);
+  }
+
+  e.target.value="";
+});
+
+document.getElementById("buscar").addEventListener("input",dibujar);
+
+function exportarDatos(){
+  const blob=new Blob([JSON.stringify(datos,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+
+  a.href=url;
+  a.download="copia-CD-La-Guardia.json";
+  a.click();
+
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+document.getElementById("archivoImportar").addEventListener("change",async e=>{
+  const archivo=e.target.files[0];
+  if(!archivo)return;
+
+  try{
+    const copia=JSON.parse(await archivo.text());
+
+    if(!Array.isArray(copia.jugadores)||!Array.isArray(copia.temporadas)){
+      throw new Error("El archivo no es una copia válida.");
+    }
+
+    if(!confirm("La importación reemplazará los datos actuales. ¿Continuar?"))return;
+
+    datos=copia;
+
+    cargarDatosImportados();
+    guardar();
+    dibujar();
+    dibujarTemporadas();
+    cerrarModal("modalTemporadas");
+
+    aviso("Copia importada correctamente.");
+  }catch(err){
+    alert(err.message||"No se pudo importar la copia.");
+  }
+
+  e.target.value="";
+});
+
+function cargarDatosImportados(){
+  if(!datos.escudo)datos.escudo="";
+  if(!Array.isArray(datos.temporadas))datos.temporadas=[];
+  if(!Array.isArray(datos.jugadores))datos.jugadores=[];
+
+  TEMPORADAS_INICIALES.forEach(t=>{
+    if(!datos.temporadas.includes(t))datos.temporadas.push(t);
+  });
+
+  datos.temporadas.sort();
+
+  if(!datos.temporadaActual||!datos.temporadas.includes(datos.temporadaActual)){
+    datos.temporadaActual=datos.temporadas[0]||TEMPORADA_INICIAL;
+  }
+
+  datos.jugadores.forEach(j=>{
+    j.temporadas=Array.isArray(j.temporadas)?j.temporadas:[];
+    j.estadisticas=Array.isArray(j.estadisticas)?j.estadisticas:[];
+
+    if(typeof j.activo!=="boolean")j.activo=true;
+
+    j.estadisticas=j.estadisticas.map(s=>({
+      temporada:s.temporada,
+      partidos:Number(s.partidos)||0,
+      goles:Number(s.goles)||0,
+      amarillas:Number(s.amarillas)||0,
+      rojas:Number(s.rojas)||0
+    }));
+  });
+
+  migrarTemporadasAntiguas();
+}
+
+document.querySelectorAll(".modal").forEach(modal=>{
+  modal.addEventListener("click",e=>{
+    if(e.target===modal)cerrarModal(modal.id);
+  });
+});
+
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){
+    document.querySelectorAll(".modal.abierto").forEach(m=>cerrarModal(m.id));
+  }
+});
+
+cargar();
+dibujar();
+iniciarSincronizacion();
+</script>
+</body>
+</html>
